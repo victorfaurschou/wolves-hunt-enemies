@@ -1,0 +1,42 @@
+{
+	"schemaVersion": 1,
+	"id": "wolves-hunt-enemies",
+	"version": "${version}",
+	"name": "Wolves Hunt Enemies",
+	"description": "Enables wolves to proactively attack nearby hostile mobs.",
+	"authors": [
+		"medicalwhiskey"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/wolves-hunt-enemies",
+		"sources": "https://github.com/victorfaurschou/wolves-hunt-enemies",
+		"issues": "https://github.com/victorfaurschou/wolves-hunt-enemies/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/wolves-hunt-enemies/icon.png",
+	"environment": "*",
+	"mixins": [
+		"wolves-hunt-enemies.mixins.json"
+	],
+	"entrypoints": {
+		"main": [
+			"com.victorfaurschou.wolveshuntenemies.WolvesHuntEnemies"
+		],
+		"client": [
+			"com.victorfaurschou.wolveshuntenemies.client.WolvesHuntEnemiesClient"
+		],
+		"modmenu": [
+			"com.victorfaurschou.wolveshuntenemies.client.ModMenuIntegration"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": ">=26.2 <26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"cloth-config": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
+	}
+}
