@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.victorfaurschou.wolveshuntenemies.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "MobAccessor",
+    "TamableAnimalMixin",
+    "WolfMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

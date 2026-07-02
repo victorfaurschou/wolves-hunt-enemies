@@ -1,0 +1,17 @@
+{
+  "config.wolves-hunt-enemies.title": "Wolves Hunt Enemies",
+  "config.wolves-hunt-enemies.category.general": "General",
+  "config.wolves-hunt-enemies.category.mobs": "Mobs",
+  "config.wolves-hunt-enemies.attack_radius": "Attack Radius",
+  "config.wolves-hunt-enemies.attack_radius.tooltip": "Distance within which a wolf will detect and attack enemies.",
+  "config.wolves-hunt-enemies.chase_radius": "Chase Radius",
+  "config.wolves-hunt-enemies.chase_radius.tooltip": "How far a wolf will chase an enemy before giving up.",
+  "config.wolves-hunt-enemies.pack_spread": "Pack Spread",
+  "config.wolves-hunt-enemies.pack_spread.tooltip": "When enabled, wolves spread out and each target a different enemy. When disabled, all wolves focus the closest enemy.",
+  "config.wolves-hunt-enemies.path_back": "Path Back",
+  "config.wolves-hunt-enemies.path_back.tooltip": "When enabled, wolves will walk back to you instead of teleporting.",
+  "config.wolves-hunt-enemies.loot_pickup": "Loot Pickup",
+  "config.wolves-hunt-enemies.loot_pickup.tooltip": "When enabled, items dropped by enemies killed by your wolves will be picked up for you.",
+  "config.wolves-hunt-enemies.experience_pickup": "Experience Pickup",
+  "config.wolves-hunt-enemies.experience_pickup.tooltip": "When enabled, XP dropped by enemies killed by your wolves is collected for you."
+}
