@@ -1,11 +1,15 @@
 package com.victorfaurschou.wolveshuntenemies;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,9 +21,10 @@ import java.util.UUID;
 public class WolfAttackGoal extends TargetGoal {
 
     private static final int SCAN_INTERVAL = 10;
-    private static final int STUCK_CHECK_INTERVAL = 20; // ticks between progress checks (1 second)
-    private static final int STUCK_MAX_FAILURES = 4;    // give up after 4 failed checks (~4 seconds)
-    private static final double ATTACK_REACH_SQ = 9.0;  // 3 blocks; within this range the wolf is fighting
+    private static final int STUCK_CHECK_INTERVAL = 20;
+    private static final int STUCK_MAX_FAILURES = 4;
+    private static final double ATTACK_REACH_SQ = 9.0;
+    private static final double MAX_OBSTRUCTION = 1.0;
 
     private final Wolf wolf;
     private @Nullable LivingEntity attackTarget;
@@ -55,7 +60,7 @@ public class WolfAttackGoal extends TargetGoal {
 
         List<Monster> candidates = wolf.level().getEntitiesOfClass(
                 Monster.class, box,
-                e -> e.isAlive() && WolvesHuntEnemiesConfig.isMobEnabled(e)
+                e -> e.isAlive() && WolvesHuntEnemiesConfig.isMobEnabled(e) && hasClearPath(wolf, e)
         );
 
         if (candidates.isEmpty()) return false;
@@ -109,6 +114,30 @@ public class WolfAttackGoal extends TargetGoal {
             prevDistSqToTarget = distSq;
         }
 
+        return true;
+    }
+
+    private static boolean hasClearPath(Wolf wolf, Monster target) {
+        Level level = wolf.level();
+        Vec3 from = wolf.getEyePosition();
+        Vec3 to = target.getEyePosition();
+        double dist = from.distanceTo(to);
+        if (dist < 1.0e-4) return true;
+
+        int steps = Math.max(1, (int) Math.ceil(dist / 0.5));
+        double stepLen = dist / steps;
+        double obstructed = 0;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
+        for (int i = 0; i <= steps; i++) {
+            Vec3 p = from.lerp(to, (double) i / steps);
+            pos.set(p.x, p.y, p.z);
+            BlockState state = level.getBlockState(pos);
+            if (!state.getCollisionShape(level, pos).isEmpty()) {
+                obstructed += stepLen;
+                if (obstructed > MAX_OBSTRUCTION) return false;
+            }
+        }
         return true;
     }
 }
