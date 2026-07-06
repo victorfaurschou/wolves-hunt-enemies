@@ -66,8 +66,10 @@ public class WolvesHuntEnemiesConfig {
         DEFAULT_ENABLED_MOBS = Collections.unmodifiableSet(d);
     }
 
-    public static volatile float   attackRadius = 16.0f;
-    public static volatile float   chaseRadius  = 32.0f;
+    private static final int MIN_CHASE_MARGIN = 6;
+
+    public static volatile int     attackRadius = 12;
+    public static volatile int     chaseRadius  = 24;
     public static volatile boolean packSpread   = false;
     public static volatile boolean pathBack     = false;
     public static volatile boolean lootPickup       = false;
@@ -87,8 +89,8 @@ public class WolvesHuntEnemiesConfig {
                 try (FileReader r = new FileReader(CONFIG_FILE)) {
                     ConfigData d = GSON.fromJson(r, ConfigData.class);
                     if (d != null) {
-                        attackRadius = d.attackRadius != null ? Math.max(4f, Math.min(64f, d.attackRadius))    : 16.0f;
-                        chaseRadius  = d.chaseRadius  != null ? Math.max(4f, Math.min(128f, d.chaseRadius))    : 32.0f;
+                        attackRadius = d.attackRadius != null ? Math.max(4, Math.min(32, d.attackRadius))    : 12;
+                        chaseRadius  = d.chaseRadius  != null ? Math.max(4, Math.min(64, d.chaseRadius))    : 24;
                         packSpread   = d.packSpread   != null ? d.packSpread   : false;
                         pathBack     = d.pathBack     != null ? d.pathBack     : false;
                         lootPickup       = d.lootPickup       != null ? d.lootPickup       : false;
@@ -104,9 +106,11 @@ public class WolvesHuntEnemiesConfig {
             WolvesHuntEnemies.LOGGER.warn("Config is malformed or from an older version, resetting to defaults", e);
             CONFIG_FILE.delete();
         }
+        chaseRadius = Math.max(chaseRadius, attackRadius + MIN_CHASE_MARGIN);
     }
 
     public static void save() {
+        chaseRadius = Math.max(chaseRadius, attackRadius + MIN_CHASE_MARGIN);
         try {
             CONFIG_FILE.getParentFile().mkdirs();
             try (FileWriter w = new FileWriter(CONFIG_FILE)) {
@@ -122,8 +126,8 @@ public class WolvesHuntEnemiesConfig {
     }
 
     static class ConfigData {
-        Float   attackRadius;
-        Float   chaseRadius;
+        Integer attackRadius;
+        Integer chaseRadius;
         Boolean packSpread;
         Boolean pathBack;
         Boolean lootPickup;
@@ -132,7 +136,7 @@ public class WolvesHuntEnemiesConfig {
 
         ConfigData() {}
 
-        ConfigData(float attackRadius, float chaseRadius, boolean packSpread, boolean pathBack,
+        ConfigData(int attackRadius, int chaseRadius, boolean packSpread, boolean pathBack,
                    boolean lootPickup, boolean experiencePickup, List<String> enabledMobs) {
             this.attackRadius     = attackRadius;
             this.chaseRadius      = chaseRadius;

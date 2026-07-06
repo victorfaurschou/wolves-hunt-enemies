@@ -25,6 +25,7 @@ public class WolfAttackGoal extends TargetGoal {
     private static final int STUCK_MAX_FAILURES = 4;
     private static final double ATTACK_REACH_SQ = 9.0;
     private static final double MAX_OBSTRUCTION = 1.0;
+    private static final int MIN_CHASE_MARGIN = 6;
 
     private final Wolf wolf;
     private @Nullable LivingEntity attackTarget;
@@ -49,9 +50,9 @@ public class WolfAttackGoal extends TargetGoal {
         LivingEntity owner = wolf.getOwner();
         if (owner == null) return false;
 
-        float r = WolvesHuntEnemiesConfig.attackRadius;
-        float leash = WolvesHuntEnemiesConfig.chaseRadius;
-        if (r > leash) return false;
+        int r = WolvesHuntEnemiesConfig.attackRadius;
+        int leash = WolvesHuntEnemiesConfig.chaseRadius;
+        if (r + MIN_CHASE_MARGIN > leash) return false;
 
         AABB box = new AABB(
                 owner.getX() - r, owner.getY() - r, owner.getZ() - r,
@@ -100,8 +101,8 @@ public class WolfAttackGoal extends TargetGoal {
         if (wolf.isOrderedToSit()) return false;
         LivingEntity owner = wolf.getOwner();
         if (owner == null) return false;
-        float leash = WolvesHuntEnemiesConfig.chaseRadius;
-        if (owner.distanceToSqr(target) > leash * leash) return false;
+        int leash = WolvesHuntEnemiesConfig.chaseRadius;
+        if (owner.distanceToSqr(target) > (double) leash * leash) return false;
 
         if (--stuckTimer <= 0) {
             stuckTimer = STUCK_CHECK_INTERVAL;

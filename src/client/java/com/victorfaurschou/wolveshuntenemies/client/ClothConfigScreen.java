@@ -20,22 +20,21 @@ public class ClothConfigScreen {
         ConfigCategory general = builder.getOrCreateCategory(
                 Component.translatable("config.wolves-hunt-enemies.category.general"));
 
-        // attackRadius stored as float 4–64; slider uses ×2 ints for 0.5-block steps
         general.addEntry(e.startIntSlider(
                         Component.translatable("config.wolves-hunt-enemies.attack_radius"),
-                        Math.round(WolvesHuntEnemiesConfig.attackRadius * 2), 8, 128)
-                .setDefaultValue(32)
-                .setTextGetter(v -> Component.literal(String.format("%.1f blocks", v / 2.0f)))
-                .setSaveConsumer(v -> WolvesHuntEnemiesConfig.attackRadius = v / 2.0f)
+                        WolvesHuntEnemiesConfig.attackRadius, 4, 32)
+                .setDefaultValue(12)
+                .setTextGetter(v -> Component.literal(v + " blocks"))
+                .setSaveConsumer(v -> WolvesHuntEnemiesConfig.attackRadius = v)
                 .setTooltip(Component.translatable("config.wolves-hunt-enemies.attack_radius.tooltip"))
                 .build());
 
         general.addEntry(e.startIntSlider(
                         Component.translatable("config.wolves-hunt-enemies.chase_radius"),
-                        Math.round(WolvesHuntEnemiesConfig.chaseRadius * 2), 8, 256)
-                .setDefaultValue(64)
-                .setTextGetter(v -> Component.literal(String.format("%.1f blocks", v / 2.0f)))
-                .setSaveConsumer(v -> WolvesHuntEnemiesConfig.chaseRadius = v / 2.0f)
+                        WolvesHuntEnemiesConfig.chaseRadius, 4, 64)
+                .setDefaultValue(24)
+                .setTextGetter(v -> Component.literal(v + " blocks"))
+                .setSaveConsumer(v -> WolvesHuntEnemiesConfig.chaseRadius = v)
                 .setTooltip(Component.translatable("config.wolves-hunt-enemies.chase_radius.tooltip"))
                 .build());
 
